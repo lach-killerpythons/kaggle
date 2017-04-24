@@ -1,19 +1,18 @@
+"""
+This creates a tensorboard of a gradient descent implementation for the MNIST dataset.
+Implementation is done in tf version 1.0
+Hosting tensorboard on local machine allows interaction with the tensorboard.
+Interaction includes: diagrams, histograms, cost functions, ect..
+"""
 
-"""
-#import mnist with keras
-from keras.datasets import mnist
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
-#import from csv with pandas
-import pandas as pd
-train = pd.read_csv("train.csv")
-test = pd.read_csv("test.csv")
-"""
-import input_data
+
+
+import input_data # must have this file in directory
 mnist=input_data.read_data_sets("/tmp/data/", one_hot=True)
-import tensorflow as tf
+import tensorflow as tf #Version 1.0+
 
 
-
+graphdump = '/Users/Alien/Documents/python/data ventures/MNIST_ALPHA/graphs' #change this for your local machine
 
 
 learning_rate= 0.01
@@ -51,10 +50,7 @@ merged_summary_op = tf.summary.merge_all() #tf.merge_all_summaries() ~ old
 
 with tf.Session() as sess:
     sess.run(init)
-    summary_writer = tf.summary.FileWriter('/Users/Alien/Documents/python/data ventures/MNIST_ALPHA/graphs', graph_def=sess.graph_def)
-        #tf.train.SummaryWriter('/Users/Alien/Documents/python/data ventures/MNIST_ALPHA/graphs', graph_def=sess.graph_def)
-
-    #tf.summary.FileWriter()
+    summary_writer = tf.summary.FileWriter(graphdump, graph_def=sess.graph_def)
     for iteration in range(training_iteration):
         avg_cost = 0.
         total_batch = int(mnist.train.num_examples/batch_size)
@@ -73,5 +69,6 @@ with tf.Session() as sess:
     print ("accuracy:", accuracy.eval({x:mnist.test.images, y:mnist.test.labels}))
 
 
-#run board
-#tensorboard --logdir=/Users/Alien/Documents/python/data ventures/MNIST_ALPHA/graphs --port 6006
+#to run board [1] In Cmd (change for local graph dir) [2] In Browser (change for local machine name/IP address)
+#[1]# tensorboard --logdir=/Users/Alien/Documents/python/data ventures/MNIST_ALPHA/graphs --port 6006
+#[2]# userhost:6006
